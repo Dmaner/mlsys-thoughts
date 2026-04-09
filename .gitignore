@@ -92,3 +92,6 @@ Thumbs.db
 
 # Claude
 .claude/*
+
+# test json
+test.json
