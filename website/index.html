@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="dman's personal site for ML systems notes, inference systems, CUDA kernels, and AI agents."
+    />
+    <title>ML System Thoughts</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <header class="topbar" aria-label="Primary navigation">
+      <a class="brand avatar-brand" href="#home" aria-label="Home">
+        <img src="https://github.com/Dmaner.png" alt="dman GitHub avatar" />
+      </a>
+
+      <nav class="nav" aria-label="Site sections">
+        <a href="#blogs">Blog</a>
+        <a href="https://github.com/Dmaner/aisys-thoughts">Projects</a>
+      </nav>
+
+      <div class="tools" aria-label="Page tools">
+        <button class="icon-button" type="button" data-open-search aria-label="Search">
+          <svg aria-hidden="true" viewBox="0 0 24 24">
+            <circle cx="11" cy="11" r="7" />
+            <path d="m16.5 16.5 4.5 4.5" />
+          </svg>
+        </button>
+        <button class="icon-button" type="button" data-theme-toggle aria-label="Toggle contrast">
+          <svg aria-hidden="true" viewBox="0 0 24 24">
+            <path d="M20 14.2A7.5 7.5 0 0 1 9.8 4 8.2 8.2 0 1 0 20 14.2Z" />
+          </svg>
+        </button>
+        <a
+          class="icon-button"
+          href="https://github.com/Dmaner/aisys-thoughts"
+          aria-label="Open GitHub repository"
+        >
+          <svg aria-hidden="true" viewBox="0 0 24 24">
+            <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3.2-.4 6.5-1.6 6.5-7A5.4 5.4 0 0 0 19 3.8 5 5 0 0 0 18.9 0s-1.2-.4-4 1.5a13.7 13.7 0 0 0-7.3 0C4.8-.4 3.6 0 3.6 0a5 5 0 0 0-.1 3.8A5.4 5.4 0 0 0 2 7.5c0 5.4 3.3 6.6 6.5 7a4.8 4.8 0 0 0-1 3.5v4" />
+            <path d="M8 19c-3 .9-3-1.5-4-2" />
+          </svg>
+        </a>
+      </div>
+    </header>
+
+    <main id="home">
+      <section class="section-block" aria-label="Home introduction">
+        <div class="hero-grid">
+          <article class="hero-card">
+            <p class="kicker">WELCOME TO MY WEBSITE ! HERE IS MY</p>
+            <h1>ML System Thoughts</h1>
+            <p class="subtitle">ABOUT <span class="tone-agent">AGENT</span>, <span class="tone-vllm">INFERENCE</span> AND <span class="tone-cuda">CUDA</span> KERNEL</p>
+            <a class="hero-link" href="#blogs">Start Reading</a>
+            <svg class="hero-scribble" viewBox="0 0 112 18" aria-hidden="true">
+              <path d="M2 9 L8 13 L15 13 L22 8 L29 10 L36 7 L43 10 L50 10 L57 14 L64 9 L71 9 L78 13 L86 9 L94 11 L102 8 L110 10" />
+            </svg>
+          </article>
+
+          <aside class="window-card now-card" aria-label="Current focus">
+            <div class="window-dots" aria-hidden="true">
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+            <p class="kicker">Now</p>
+            <h2>Deep in vLLM</h2>
+            <p>PagedAttention, scheduler internals, serving paths, and source notes.</p>
+            <div class="mini-line"></div>
+          </aside>
+        </div>
+      </section>
+
+      <section class="section-block" id="blog" aria-labelledby="blogs-title">
+        <div class="section-title">
+          <span></span>
+          <h2 id="blogs-title">Current</h2>
+        </div>
+
+        <div class="card-grid" data-current-list aria-live="polite"></div>
+      </section>
+
+      <section class="blog-index-shell" data-blog-index-shell hidden>
+        <div class="section-title section-title-plain">
+          <h2>Blogs</h2>
+        </div>
+        <div class="blog-list" data-blog-list aria-live="polite"></div>
+      </section>
+
+      <section class="article-shell" data-article-shell hidden>
+        <article class="window-card article-card">
+          <div class="window-dots" aria-hidden="true">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+          <button class="back-button" type="button" data-back-home>Back to blogs</button>
+          <div class="article-meta" data-article-meta></div>
+          <div class="markdown-body" data-markdown-body></div>
+        </article>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <span>&copy; 2024-2026 dman · Powered by Codex</span>
+    </footer>
+
+    <dialog class="search-dialog" data-search-dialog>
+      <form method="dialog" class="window-card search-card">
+        <div class="window-dots" aria-hidden="true">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+        <div class="search-heading">
+          <label for="site-search">Search</label>
+          <button type="submit">Close</button>
+        </div>
+        <input id="site-search" type="search" placeholder="Try vLLM, CUDA, SGLang..." />
+        <div class="search-results" aria-live="polite" data-search-results></div>
+      </form>
+    </dialog>
+
+    <script src="./content-data.js"></script>
+    <script src="./script.js"></script>
+  </body>
+</html>
