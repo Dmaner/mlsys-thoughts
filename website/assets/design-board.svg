@@ -26,7 +26,7 @@
     <text x="0" y="118" fill="#64737c" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', sans-serif" font-size="13" font-weight="800">WELCOME TO MY WEBSITE ! HERE IS MY</text>
     <text x="0" y="210" fill="#162530" font-family="Georgia" font-size="86" font-weight="700">ML System</text>
     <text x="0" y="294" fill="#162530" font-family="Georgia" font-size="86" font-weight="700">Thoughts</text>
-    <text x="0" y="340" fill="#64737c" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', sans-serif" font-size="24" font-weight="600">ABOUT <tspan fill="#cd6e58" font-weight="760">AGENT</tspan>, <tspan fill="url(#inferenceSplit)" font-weight="760">INFERENCE</tspan> AND <tspan fill="#76b900" font-weight="760">CUDA</tspan> KERNEL</text>
+    <text x="0" y="340" fill="#64737c" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', sans-serif" font-size="24" font-weight="600">ABOUT <tspan fill="#cd6e58" font-weight="760">AGENT</tspan>, <tspan fill="url(#inferenceSplit)" font-weight="760">INFERENCE</tspan> AND <tspan fill="#76b900" font-weight="760">CUDA</tspan></text>
     <text x="0" y="390" fill="#162530" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', sans-serif" font-size="18" font-weight="800">Start Reading</text>
     <path d="M0 410 L6 414 L13 414 L20 409 L27 411 L34 408 L41 411 L48 411 L55 415 L62 410 L69 410 L76 414 L84 410 L92 412 L100 409 L108 411" fill="none" stroke="#f28c28" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="round"/>
   </g>
