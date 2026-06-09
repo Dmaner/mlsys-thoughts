@@ -93,16 +93,15 @@ env HF_ENDPOINT=https://hf-mirror.com \
 
 ## One-Line Runtime Download
 
-`mlx-lm` and `mlx-vlm` use `huggingface_hub` internally, so the same environment variables also work when a model is downloaded on first run:
+`mlx-vlm` uses `huggingface_hub` internally, so the same environment variables also work when a model is downloaded on first run:
 
 ```bash
 env HF_ENDPOINT=https://hf-mirror.com \
   HF_HOME=/Users/dman/.cache/huggingface \
-  .venv/bin/mlx_lm.generate \
+  .venv/bin/mlx_vlm.generate \
   --model mlx-community/gemma-4-26b-a4b-it-4bit \
   --max-tokens 128 \
-  --temp 0.0 \
-  --chat-template-config '{"enable_thinking":false}' \
+  --temperature 0.0 \
   --prompt 'Say hello in one short sentence.'
 ```
 

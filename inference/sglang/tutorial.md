@@ -1,5 +1,7 @@
 ## Tutorial For SGLang Basic Usage
 
+> Tags: #Sglang #Tutorial
+
 ### Installation
 
 https://docs.sglang.io/docs/get-started/install
@@ -13,7 +15,13 @@ python3 -m sglang.check_env
 ### Basic Usage
 
 ```bash
-CUDA_VISIBLE_DEVICES=0 python3 -m sglang.launch_server --model-path Qwen/Qwen3.5-0.8B --host 0.0.0.0 --port 30000 --mem-fraction-static 0.8 --context-length 32768  
+CUDA_VISIBLE_DEVICES=0 \
+python3 -m sglang.launch_server \
+--model-path Qwen/Qwen3.5-0.8B \
+--host 0.0.0.0 \
+--port 30000 \
+--mem-fraction-static 0.8 \
+--context-length 32768  
 
 # write to log file
 CUDA_VISIBLE_DEVICES=0 python3 -m sglang.launch_server --model-path Qwen/Qwen3.5-0.8B --host 0.0.0.0 --port 30000 --mem-fraction-static 0.8 --context-length 32768 > ~/inference/sglang/sglang.log 2>&1

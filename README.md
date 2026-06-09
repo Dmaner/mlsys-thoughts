@@ -10,8 +10,7 @@
 
 > Current focus and ongoing exploration.
 
-- [ ] **Deep in vLLM** — Exploring PagedAttention and scheduler implementation details
-- [ ] **CUDA Kernel Optimization** — Hand-writing high-performance kernels and understanding low-level performance tuning
+- **Deep in vLLM** — Exploring Omni Model and scheduler implementation details
 
 ---
 

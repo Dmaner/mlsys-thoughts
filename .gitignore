@@ -96,3 +96,9 @@ Thumbs.db
 
 # test json
 test.json
+
+# reference
+ref/*
+
+# agents env
+.env.example
