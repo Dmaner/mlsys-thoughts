@@ -1,3 +1,8 @@
+```
+Tags: #MLX #Gemma #Download
+Desc: Download, cache, mirror, and verify Gemma-family MLX model assets.
+```
+
 # Download Gemma 4 MLX Models
 
 This note only covers model download and Hugging Face mirror acceleration for MLX Gemma 4 models.

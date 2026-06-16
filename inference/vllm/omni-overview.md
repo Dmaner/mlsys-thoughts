@@ -1,6 +1,10 @@
+```
+Tags: #vLLM #vLLM-Omni
+Desc: Explore vllm-omni internals — how multimodal serving optimization works. 
+```
+
 # [Processing] vLLM-Omni Overview 
 
-# Desc
 
 # TODO
 

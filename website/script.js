@@ -77,6 +77,41 @@ function uniqueTags(tags = []) {
   return Array.from(new Set(tags.map(normalizeTag).filter(Boolean)));
 }
 
+function splitMetaTags(value = "") {
+  const hashTags = value.match(/#[\p{L}\p{N}_-]+/gu);
+  if (hashTags?.length) return uniqueTags(hashTags);
+  return uniqueTags(value.split(/[,，\s]+/));
+}
+
+function parsePostMetadata(markdown = "") {
+  const source = String(markdown).replace(/\r\n/g, "\n");
+  const match = source.match(/^\s*```\s*\n([\s\S]*?)\n```\s*/);
+  if (!match) return { tags: [], desc: "", raw: "", markdown: source };
+
+  const raw = match[1].trim();
+  const metadata = { tags: [], desc: "", raw, markdown: source.slice(match[0].length) };
+
+  raw.split("\n").forEach((line) => {
+    const cleanLine = line.trim();
+    const tagMatch = cleanLine.match(/^tags?\s*:\s*(.+)$/i);
+    if (tagMatch) {
+      metadata.tags = uniqueTags([...metadata.tags, ...splitMetaTags(tagMatch[1])]);
+      return;
+    }
+
+    const descMatch = cleanLine.match(/^(desc|description)\s*:\s*(.+)$/i);
+    if (descMatch) {
+      metadata.desc = descMatch[2].trim();
+    }
+  });
+
+  if (!metadata.tags.length && !metadata.desc) {
+    return { tags: [], desc: "", raw: "", markdown: source };
+  }
+
+  return metadata;
+}
+
 function formatDate(value) {
   if (!value) return "";
   const date = new Date(value);
@@ -109,14 +144,12 @@ function renderTagList(tags = []) {
 }
 
 function parseTagsFromMarkdown(markdown) {
-  const match = markdown.match(/^>\s*Tags:\s*(.+)$/im);
-  if (!match) return [];
-  return uniqueTags(match[1].match(/#[\p{L}\p{N}_-]+/gu) || []);
+  const metadata = parsePostMetadata(markdown);
+  return metadata.tags;
 }
 
 function stripPostMetadata(markdown) {
-  return markdown
-    .replace(/^>\s*Tags:\s*.+$/gim, "")
+  return parsePostMetadata(markdown).markdown
     .replace(/\n{3,}/g, "\n\n")
     .trim();
 }
@@ -352,8 +385,25 @@ function renderNestedList(items) {
   return renderNodes(root.children);
 }
 
-function markdownToHtml(markdown) {
-  const lines = stripPostMetadata(markdown).replace(/\r\n/g, "\n").split("\n");
+function normalizeHeading(value = "") {
+  return String(value)
+    .replace(/[`*_]+/g, "")
+    .replace(/\s+/g, " ")
+    .trim()
+    .toLowerCase();
+}
+
+function stripLeadingTitle(markdown, title) {
+  if (!title) return markdown;
+  const source = markdown.replace(/\r\n/g, "\n");
+  const match = source.match(/^\s*#{1,3}\s+(.+?)\s*(?:\n|$)/);
+  if (!match || normalizeHeading(match[1]) !== normalizeHeading(title)) return source;
+  return source.slice(match[0].length).replace(/^\n+/, "");
+}
+
+function markdownToHtml(markdown, options = {}) {
+  const source = stripLeadingTitle(stripPostMetadata(markdown), options.title);
+  const lines = source.replace(/\r\n/g, "\n").split("\n");
   const html = [];
   let paragraph = [];
   let list = [];
@@ -509,10 +559,12 @@ async function openPost(slug) {
   markdownBody.innerHTML = "<p>Loading Markdown...</p>";
 
   if (typeof item.markdown === "string") {
-    const tags = uniqueTags([...(item.tags || []), ...parseTagsFromMarkdown(item.markdown)]);
-    renderArticleMeta({ ...item, tags }, tags);
+    const metadata = parsePostMetadata(item.markdown);
+    const tags = uniqueTags(metadata.tags.length ? metadata.tags : item.tags || []);
+    const description = metadata.desc || item.description;
+    renderArticleMeta({ ...item, description, tags }, tags);
     markdownBody.innerHTML = item.markdown.trim()
-      ? markdownToHtml(item.markdown)
+      ? markdownToHtml(item.markdown, { title: item.title })
       : `<p>This Markdown file is currently empty.</p>`;
     window.scrollTo({ top: 0, behavior: "smooth" });
     return;
@@ -522,10 +574,12 @@ async function openPost(slug) {
     const response = await fetch(item.path);
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
     const markdown = await response.text();
-    const tags = uniqueTags([...(item.tags || []), ...parseTagsFromMarkdown(markdown)]);
-    renderArticleMeta({ ...item, tags }, tags);
+    const metadata = parsePostMetadata(markdown);
+    const tags = uniqueTags(metadata.tags.length ? metadata.tags : item.tags || []);
+    const description = metadata.desc || item.description;
+    renderArticleMeta({ ...item, description, tags }, tags);
     markdownBody.innerHTML = markdown.trim()
-      ? markdownToHtml(markdown)
+      ? markdownToHtml(markdown, { title: item.title })
       : `<p>This Markdown file is currently empty.</p><p><a href="${escapeHtml(item.path)}">Open raw Markdown</a></p>`;
     window.scrollTo({ top: 0, behavior: "smooth" });
   } catch (error) {
@@ -608,14 +662,16 @@ function renderSearch(query) {
   });
 }
 
-async function hydrateTagsFromMarkdown(items) {
+async function hydrateMetadataFromMarkdown(items) {
   const hydrated = await Promise.all(
     items.map(async (item) => {
       if (typeof item.markdown === "string") {
+        const metadata = parsePostMetadata(item.markdown);
         const parsedTags = parseTagsFromMarkdown(item.markdown);
         return {
           ...item,
-          tags: uniqueTags([...(item.tags || []), ...parsedTags]),
+          description: metadata.desc || item.description,
+          tags: uniqueTags(parsedTags.length ? parsedTags : item.tags || []),
         };
       }
 
@@ -623,10 +679,12 @@ async function hydrateTagsFromMarkdown(items) {
         const response = await fetch(item.path);
         if (!response.ok) return item;
         const markdown = await response.text();
+        const metadata = parsePostMetadata(markdown);
         const parsedTags = parseTagsFromMarkdown(markdown);
         return {
           ...item,
-          tags: uniqueTags([...(item.tags || []), ...parsedTags]),
+          description: metadata.desc || item.description,
+          tags: uniqueTags(parsedTags.length ? parsedTags : item.tags || []),
         };
       } catch {
         return item;
@@ -649,7 +707,7 @@ async function loadContentIndex() {
     }
   }
 
-  contentIndex = sortByCreated((await hydrateTagsFromMarkdown(contentIndex)).filter(isRenderablePost));
+  contentIndex = sortByCreated((await hydrateMetadataFromMarkdown(contentIndex)).filter(isRenderablePost));
   renderCurrentCards();
   renderBlogIndex();
   handleRoute();
