@@ -16,7 +16,7 @@ window.ML_SYSTEM_CONTENT_INDEX = [
   {
     "slug": "sglang-basics",
     "title": "SGLang basics",
-    "category": "Serving",
+    "category": "Inference",
     "description": "Launch commands, request examples, resource usage, and log parsing.",
     "path": "../inference/sglang/tutorial.md",
     "createdAt": "2026-05-21T17:31:15Z",
@@ -30,7 +30,7 @@ window.ML_SYSTEM_CONTENT_INDEX = [
   {
     "slug": "sglang-log-analysis",
     "title": "SGLang log analysis",
-    "category": "Serving",
+    "category": "Inference",
     "description": "Notes for reading and understanding SGLang runtime logs.",
     "path": "../inference/sglang/tutorial-log-parse.md",
     "createdAt": "2026-05-21T17:31:15Z",
@@ -44,7 +44,7 @@ window.ML_SYSTEM_CONTENT_INDEX = [
   {
     "slug": "mlx-workflow",
     "title": "MLX workflow",
-    "category": "Local models",
+    "category": "Inference",
     "description": "Download, cache, mirror, and verify Gemma-family MLX model assets.",
     "path": "../inference/mlx/tutorial.md",
     "createdAt": "2026-05-21T17:31:15Z",

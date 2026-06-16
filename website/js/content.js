@@ -40,6 +40,22 @@
 
   const excludedRenderPaths = new Set(["./README.md", "../README.md", "../README_zh.md", "../AGENTS.md"]);
 
+  function titleCase(value) {
+    return String(value)
+      .replace(/[-_]+/g, " ")
+      .replace(/\b\w/g, (char) => char.toUpperCase())
+      .trim();
+  }
+
+  /* Derives display category from the top-level repository directory. */
+  function categoryFromPath(path = "") {
+    const normalized = String(path).replaceAll("\\", "/").replace(/^(\.\/|\.\.\/)+/, "");
+    const topLevel = normalized.split("/").filter(Boolean)[0];
+    if (!topLevel) return "";
+    if (topLevel.toLowerCase() === "cuda") return "CUDA";
+    return titleCase(topLevel);
+  }
+
   /* Parses `Tags:` values from fenced post metadata into normalized tag labels. */
   function splitMetaTags(value = "") {
     const hashTags = value.match(/#[\p{L}\p{N}_-]+/gu);
@@ -93,10 +109,13 @@
   async function hydrateMetadataFromMarkdown(items) {
     const hydrated = await Promise.all(
       items.map(async (item) => {
+        const category = categoryFromPath(item.path) || item.category;
+
         if (typeof item.markdown === "string") {
           const metadata = parsePostMetadata(item.markdown);
           return {
             ...item,
+            category,
             description: metadata.desc || item.description,
             tags: uniqueTags(metadata.tags.length ? metadata.tags : item.tags || []),
           };
@@ -109,11 +128,12 @@
           const metadata = parsePostMetadata(markdown);
           return {
             ...item,
+            category,
             description: metadata.desc || item.description,
             tags: uniqueTags(metadata.tags.length ? metadata.tags : item.tags || []),
           };
         } catch {
-          return item;
+          return { ...item, category };
         }
       })
     );

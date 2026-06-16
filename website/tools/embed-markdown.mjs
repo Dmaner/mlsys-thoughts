@@ -9,15 +9,32 @@ const dataPath = resolve(websiteDir, "content-data.js");
 
 const entries = JSON.parse(await readFile(indexPath, "utf8"));
 
+function titleCase(value) {
+  return String(value)
+    .replace(/[-_]+/g, " ")
+    .replace(/\b\w/g, (char) => char.toUpperCase())
+    .trim();
+}
+
+function categoryFromPath(path = "") {
+  const normalized = String(path).replaceAll("\\", "/").replace(/^(\.\/|\.\.\/)+/, "");
+  const topLevel = normalized.split("/").filter(Boolean)[0];
+  if (!topLevel) return "";
+  if (topLevel.toLowerCase() === "cuda") return "CUDA";
+  return titleCase(topLevel);
+}
+
 const hydrated = await Promise.all(
   entries.map(async (entry) => {
-    if (!entry.path) return entry;
+    const category = categoryFromPath(entry.path) || entry.category;
+    if (!entry.path) return { ...entry, category };
 
     const markdownPath = resolve(websiteDir, entry.path);
     const markdown = await readFile(markdownPath, "utf8");
 
     return {
       ...entry,
+      category,
       markdown,
     };
   })
