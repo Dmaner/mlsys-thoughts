@@ -47,7 +47,7 @@ const fallbackContentIndex = [
 
 let contentIndex = [];
 
-const excludedRenderPaths = new Set(["./README.md", "../README.md", "../README_zh.md"]);
+const excludedRenderPaths = new Set(["./README.md", "../README.md", "../README_zh.md", "../AGENTS.md"]);
 
 const storedTheme = localStorage.getItem("ml-system-theme");
 if (storedTheme) {
