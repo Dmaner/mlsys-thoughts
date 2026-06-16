@@ -324,6 +324,34 @@ function renderTable(headerLine, rows) {
   `;
 }
 
+function leadingIndent(value) {
+  const match = value.replace(/\t/g, "    ").match(/^ */);
+  return match ? match[0].length : 0;
+}
+
+function renderNestedList(items) {
+  const root = { children: [] };
+  const stack = [{ indent: -1, node: root }];
+
+  items.forEach((item) => {
+    while (stack.length > 1 && item.indent <= stack[stack.length - 1].indent) {
+      stack.pop();
+    }
+
+    const node = { text: item.text, children: [] };
+    stack[stack.length - 1].node.children.push(node);
+    stack.push({ indent: item.indent, node });
+  });
+
+  function renderNodes(nodes) {
+    return `<ul>${nodes
+      .map((node) => `<li>${inlineMarkdown(node.text)}${node.children.length ? renderNodes(node.children) : ""}</li>`)
+      .join("")}</ul>`;
+  }
+
+  return renderNodes(root.children);
+}
+
 function markdownToHtml(markdown) {
   const lines = stripPostMetadata(markdown).replace(/\r\n/g, "\n").split("\n");
   const html = [];
@@ -341,7 +369,7 @@ function markdownToHtml(markdown) {
 
   function flushList() {
     if (!list.length) return;
-    html.push(`<ul>${list.map((item) => `<li>${inlineMarkdown(item)}</li>`).join("")}</ul>`);
+    html.push(renderNestedList(list));
     list = [];
   }
 
@@ -392,6 +420,23 @@ function markdownToHtml(markdown) {
       continue;
     }
 
+    const quote = line.match(/^\s*>\s?(.*)$/);
+    if (quote) {
+      flushParagraph();
+      flushList();
+      const quoteLines = [quote[1]];
+
+      while (index + 1 < lines.length) {
+        const nextQuote = lines[index + 1].match(/^\s*>\s?(.*)$/);
+        if (!nextQuote) break;
+        quoteLines.push(nextQuote[1]);
+        index += 1;
+      }
+
+      html.push(`<blockquote>${markdownToHtml(quoteLines.join("\n"))}</blockquote>`);
+      continue;
+    }
+
     const heading = line.match(/^(#{1,4})\s+(.+)$/);
     if (heading) {
       flushParagraph();
@@ -401,10 +446,10 @@ function markdownToHtml(markdown) {
       continue;
     }
 
-    const item = line.match(/^\s*[-*]\s+(.+)$/);
+    const item = line.match(/^(\s*)[-*]\s+(.+)$/);
     if (item) {
       flushParagraph();
-      list.push(item[1]);
+      list.push({ indent: leadingIndent(item[1]), text: item[2] });
       continue;
     }
 

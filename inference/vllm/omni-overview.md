@@ -1,11 +1,14 @@
 # [Processing] vLLM-Omni Overview 
-   
+
+# Desc
+
 # TODO
 
 - 启动 orchestrator 线程交互是怎么样的, 有几个线程
 - how to load model (TTS/Omni/Diffusion)
     - how to build stage graph  
 - 多模态请求怎么构建
+- Streaming 流程
 
 # Architecture
 
