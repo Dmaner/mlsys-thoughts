@@ -18,6 +18,11 @@
       return;
     }
 
+    if (window.location.hash === "#projects") {
+      app.views.showProjects();
+      return;
+    }
+
     app.views.showHome();
   }
 
@@ -28,6 +33,7 @@
 
     app.views.renderCurrentCards(contentIndex);
     app.views.renderBlogIndex(contentIndex);
+    app.views.renderProjectTimeline(app.projects?.items || []);
     app.search.initSearch(() => contentIndex);
 
     app.views.nodes.backHome?.addEventListener("click", () => {

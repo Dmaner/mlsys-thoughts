@@ -13,6 +13,8 @@
     currentList: document.querySelector("[data-current-list]"),
     blogList: document.querySelector("[data-blog-list]"),
     blogIndexShell: document.querySelector("[data-blog-index-shell]"),
+    projectsShell: document.querySelector("[data-projects-shell]"),
+    projectTimeline: document.querySelector("[data-project-timeline]"),
     articleShell: document.querySelector("[data-article-shell]"),
     markdownBody: document.querySelector("[data-markdown-body]"),
     articleMeta: document.querySelector("[data-article-meta]"),
@@ -40,20 +42,32 @@
       .join("")}</div>`;
   }
 
+  function setHomeSectionsHidden(hidden) {
+    document.querySelectorAll(".section-block").forEach((section) => {
+      section.hidden = hidden;
+    });
+  }
+
   function showHome() {
     nodes.articleShell.hidden = true;
     nodes.blogIndexShell.hidden = true;
-    document.querySelectorAll(".section-block").forEach((section) => {
-      section.hidden = false;
-    });
+    nodes.projectsShell.hidden = true;
+    setHomeSectionsHidden(false);
   }
 
   function showBlogIndex() {
     nodes.articleShell.hidden = true;
     nodes.blogIndexShell.hidden = false;
-    document.querySelectorAll(".section-block").forEach((section) => {
-      section.hidden = true;
-    });
+    nodes.projectsShell.hidden = true;
+    setHomeSectionsHidden(true);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  function showProjects() {
+    nodes.articleShell.hidden = true;
+    nodes.blogIndexShell.hidden = true;
+    nodes.projectsShell.hidden = false;
+    setHomeSectionsHidden(true);
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
@@ -77,10 +91,9 @@
       return;
     }
 
-    document.querySelectorAll(".section-block").forEach((section) => {
-      section.hidden = true;
-    });
+    setHomeSectionsHidden(true);
     nodes.blogIndexShell.hidden = true;
+    nodes.projectsShell.hidden = true;
     nodes.articleShell.hidden = false;
     renderArticleMeta(item);
     nodes.markdownBody.innerHTML = "<p>Loading Markdown...</p>";
@@ -159,14 +172,67 @@
     nodes.blogList.innerHTML = sortByCreated(contentIndex).map(renderBlogRow).join("");
   }
 
+  function formatProjectMonth(value) {
+    const date = new Date(value);
+    if (Number.isNaN(date.getTime())) return { year: "", month: "" };
+    return {
+      year: String(date.getFullYear()),
+      month: String(date.getMonth() + 1).padStart(2, "0"),
+    };
+  }
+
+  function renderProjectItem(item) {
+    const date = formatProjectMonth(item.createdAt);
+    const links = [
+      `<a href="${escapeHtml(item.href)}" target="_blank" rel="noreferrer">GitHub</a>`,
+      item.homepage
+        ? `<a href="${escapeHtml(item.homepage)}" target="_blank" rel="noreferrer">Pages</a>`
+        : "",
+    ].filter(Boolean);
+
+    return `
+      <article class="project-timeline-item">
+        <time class="project-date" datetime="${escapeHtml(item.createdAt || "")}">
+          <span>${escapeHtml(date.year)}</span>
+          <strong>${escapeHtml(date.month)}</strong>
+        </time>
+        <div class="window-card project-card">
+          <div class="window-dots" aria-hidden="true">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+          <p class="kicker">${escapeHtml(item.repo)}</p>
+          <h3>${escapeHtml(item.title)}</h3>
+          <p>${escapeHtml(item.description)}</p>
+          <div class="project-meta">
+            <span>${escapeHtml(item.language)}</span>
+            ${links.join("")}
+          </div>
+          ${renderTagList(item.tags)}
+          <div class="blue-stroke"></div>
+        </div>
+      </article>
+    `;
+  }
+
+  function renderProjectTimeline(projects = []) {
+    const sortedProjects = sortByCreated(projects);
+    nodes.projectTimeline.innerHTML = sortedProjects.length
+      ? sortedProjects.map(renderProjectItem).join("")
+      : `<p class="empty-state">No projects yet.</p>`;
+  }
+
   app.views = {
     initTheme,
     nodes,
     openPost,
     renderBlogIndex,
     renderCurrentCards,
+    renderProjectTimeline,
     renderTagList,
     showBlogIndex,
     showHome,
+    showProjects,
   };
 })(window);
