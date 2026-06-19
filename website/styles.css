@@ -496,13 +496,56 @@ main {
     inset 0 0 0 1px rgba(255, 255, 255, 0.56);
 }
 
+.project-title-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  min-width: 0;
+}
+
 .project-card h3 {
+  min-width: 0;
   margin: 0;
   font-family: var(--serif);
   font-size: 38px;
   line-height: 1.02;
   overflow-wrap: anywhere;
   word-break: break-word;
+}
+
+.project-actions {
+  display: inline-flex;
+  flex: 0 0 auto;
+  gap: 7px;
+  align-items: center;
+}
+
+.project-action {
+  display: inline-grid;
+  width: 24px;
+  height: 24px;
+  place-items: center;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  background: var(--paper-2);
+  color: var(--nav);
+}
+
+.project-action:hover {
+  color: var(--blue);
+  border-color: rgba(36, 88, 255, 0.32);
+  background: rgba(36, 88, 255, 0.08);
+}
+
+.project-action svg {
+  width: 13px;
+  height: 13px;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 2.2;
 }
 
 .project-card .kicker,
@@ -520,19 +563,36 @@ main {
   line-height: 1.6;
 }
 
-.project-meta {
+.project-language-row {
   display: flex;
   flex-wrap: wrap;
-  gap: 12px;
   align-items: center;
   margin-top: 18px;
-  color: var(--muted);
-  font-size: 13px;
-  font-weight: 760;
 }
 
-.project-meta a {
-  color: var(--blue);
+.project-language-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 24px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: #2458ff;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 780;
+  line-height: 1;
+}
+
+.project-language-chip span {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.78);
+}
+
+.project-card .tag-list {
+  margin-top: 12px;
 }
 
 .empty-state {

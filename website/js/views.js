@@ -183,12 +183,32 @@
 
   function renderProjectItem(item) {
     const date = formatProjectMonth(item.createdAt);
-    const links = [
-      `<a href="${escapeHtml(item.href)}" target="_blank" rel="noreferrer">GitHub</a>`,
+    const actions = [
+      item.href
+        ? `<a class="project-action" href="${escapeHtml(item.href)}" target="_blank" rel="noreferrer" aria-label="Open GitHub repository for ${escapeHtml(item.title)}">
+            <svg aria-hidden="true" viewBox="0 0 24 24">
+              <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3.2-.4 6.5-1.6 6.5-7A5.4 5.4 0 0 0 19 3.8 5 5 0 0 0 18.9 0s-1.2-.4-4 1.5a13.7 13.7 0 0 0-7.3 0C4.8-.4 3.6 0 3.6 0a5 5 0 0 0-.1 3.8A5.4 5.4 0 0 0 2 7.5c0 5.4 3.3 6.6 6.5 7a4.8 4.8 0 0 0-1 3.5v4" />
+              <path d="M8 19c-3 .9-3-1.5-4-2" />
+            </svg>
+          </a>`
+        : "",
       item.homepage
-        ? `<a href="${escapeHtml(item.homepage)}" target="_blank" rel="noreferrer">Pages</a>`
+        ? `<a class="project-action" href="${escapeHtml(item.homepage)}" target="_blank" rel="noreferrer" aria-label="Open project page for ${escapeHtml(item.title)}">
+            <svg aria-hidden="true" viewBox="0 0 24 24">
+              <path d="M7 17 17 7" />
+              <path d="M9 7h8v8" />
+            </svg>
+          </a>`
         : "",
     ].filter(Boolean);
+    const language = item.language
+      ? `<div class="project-language-row">
+          <span class="project-language-chip">
+            <span aria-hidden="true"></span>
+            ${escapeHtml(item.language)}
+          </span>
+        </div>`
+      : "";
 
     return `
       <article class="project-timeline-item">
@@ -203,12 +223,12 @@
             <span></span>
           </div>
           <p class="kicker">${escapeHtml(item.repo)}</p>
-          <h3>${escapeHtml(item.title)}</h3>
-          <p>${escapeHtml(item.description)}</p>
-          <div class="project-meta">
-            <span>${escapeHtml(item.language)}</span>
-            ${links.join("")}
+          <div class="project-title-row">
+            <h3>${escapeHtml(item.title)}</h3>
+            ${actions.length ? `<div class="project-actions">${actions.join("")}</div>` : ""}
           </div>
+          <p>${escapeHtml(item.description)}</p>
+          ${language}
           ${renderTagList(item.tags)}
           <div class="blue-stroke"></div>
         </div>
