@@ -1,5 +1,56 @@
 [
   {
+    "slug": "2026-lecture-17-multimodality",
+    "title": "Lecture 17: Alignment - Multimodality",
+    "category": "Model",
+    "description": "!arch",
+    "path": "../model/cs336/2026 Lecture 17 Multimodality.md",
+    "createdAt": "2026-06-27T12:58:24.943Z",
+    "tags": [],
+    "featured": false,
+    "markdown": "# Lecture 17: Alignment - Multimodality\n\n> Lecture : https://www.youtube.com/watch?v=26FtD08ZpOU&list=PLoROMvodv4rMqXOcazWaTUHhq-yembLCV&index=17 \\\n> Slides: https://cs336.stanford.edu/lectures/?trace=lecture_17\n\n# Keywords\n\n> CLIP, LLAVA, QWEN VL, Multimodality\n\n# Lectures Notes\n\n课程大纲\n\n- Encoding images\n- Injecting image encodings into LLMs\n- Towards Omni models\n\n## ViT\n\n![arch](assets/vit.png)\n\n## CLIP\n\n自然语言可以作为通用的视觉监督\n\n> https://arxiv.org/abs/2103.00020\n\n\n![CLIP](assets/clip.png)\n\npseudocode\n\n![CLIP](assets/code-clip.png)\n\n## llava\n\nImage -> Vision Encoder: CLIP -> Projection -> LM\n\n![llava](assets/llava.png)\n\nllava onevision\n\n![llava_onevision](assets/llava_onevision.png)\n\n## Qwen-VL\n\nQwen2-VL\n\n![Qwen2-VL](assets/qwen2-vl.png)\n\nQwen3-VL\n\n![Qwen3-VL](assets/qwen3-vl.png)\n\n# Explore\n\n## Omni Model\n\nQwen3-Omni\n\n![arch](assets/qwen3-omni.png)\n\nAuT\n\n![arch](assets/aut.png)"
+  },
+  {
+    "slug": "codex-overview",
+    "title": "CodeX Overview",
+    "category": "Agent",
+    "description": "CodeX Overview notes.",
+    "path": "../agent/framwork/codex-overview.md",
+    "createdAt": "2026-06-27T12:58:21.385Z",
+    "tags": [
+      "Agent"
+    ],
+    "featured": false,
+    "markdown": "```\n```\n\n# CodeX Overview\n\n## Architecture\n\n## GPT Model Enhancement\n\n> 对GPT模型有哪些特殊逻辑优化"
+  },
+  {
+    "slug": "slime-overview",
+    "title": "Slime Overview",
+    "category": "Agent",
+    "description": "1. Official Doc: https://thudm.github.io/slime/",
+    "path": "../agent/rl/slime-overview.md",
+    "createdAt": "2026-06-27T12:58:15.917Z",
+    "tags": [
+      "RL"
+    ],
+    "featured": false,
+    "markdown": "```\ntags: #RL\n```\n\n# Slime Overview\n\n## TODO\n\n- know the basic of post training infra\n\n## Ari\n\n## Reference\n\n1. Official Doc: https://thudm.github.io/slime/\n2. [深入浅出 slime RL 框架的优雅设计与源码](https://zhuanlan.zhihu.com/p/1946402397409740613) "
+  },
+  {
+    "slug": "sglang-omni-overview",
+    "title": "Sglang Omni Overview (🏗️ Processing...)",
+    "category": "Inference",
+    "description": "1. SGLang Omni Refactor Tracking",
+    "path": "../inference/sglang/sglang-omni-overview.md",
+    "createdAt": "2026-06-27T12:58:12.955Z",
+    "tags": [
+      "Omni",
+      "Sglang"
+    ],
+    "featured": false,
+    "markdown": "```\ntags: #Omni #Sglang\n```\n\n## Sglang Omni Overview (🏗️ Processing...)\n\n\n## Reference\n\n1. [SGLang Omni Refactor Tracking](https://njpxzlfqwrqq.jp.larksuite.com/wiki/VTcEwGVEuihm6xkquEdjc424pNb)"
+  },
+  {
     "slug": "omni-overview",
     "title": "[Processing] vLLM-Omni Overview",
     "category": "Inference",
@@ -11,7 +62,7 @@
       "vLLM-Omni"
     ],
     "featured": false,
-    "markdown": "```\nTags: #vLLM #vLLM-Omni\nDesc: Explore vllm-omni internals — how multimodal serving optimization works. \n```\n\n# [Processing] vLLM-Omni Overview \n\n\n# TODO\n\n- 启动 orchestrator 线程交互是怎么样的, 有几个线程\n- how to load model (TTS/Omni/Diffusion)\n    - how to build stage graph  \n- 多模态请求怎么构建\n- Streaming 流程\n\n# Architecture\n\n## Entrypoint\n\n> OpenAPI/CLI\n\nkey func\n- omni_run_server\n- build_async_omni_from_stage_config\n\nmodule\n\n- AsyncOmni (EngineClient, OmniBase)\n    - generate\n\n## Engine\n\n- AsyncOmniEngine\n    - init\n        - _resolve_stage_configs: 读取配置\n        - [new thread] _bootstrap_orchestrator: 启动orchestrator\n            - _initialize_stages: 初始化stage\n        - add_request_async\n\n- Orchestrator: \n    - init: at AsyncOmniEngine\n    - run: Main entry point for the Orchestrator event loop.\n        - _request_handler: handle message from AsyncOmniEngine\n        - _orchestration_output_handler: manage inter-stage outputs\n            - _orchestration_loop\n        - _watch_replica_list:\n    - _handle_add_request\n    - _route_output\n        - _forward_to_next_stage\n\n- StagePool\n    - submit_initial\n    - process_engine_inputs\n    - [stage - stage] process_engine_inputs\n\n\n## Stage Backend\n\n- OmniARScheduler\n- OmniGenerationScheduler\n- DiffusionEngine\n\n## Model Runner\n\n- GPUARModelRunner\n\n## Config\n\n- PipelineConfig\n- StagePipelineConfig\n"
+    "markdown": "```\nTags: #vLLM #vLLM-Omni\nDesc: Explore vllm-omni internals — how multimodal serving optimization works. \n```\n\n# vLLM-Omni Overview (🏗️ Processing...)\n\n\n# TODO\n\n- [Core Problem] How does to orchestrator to manage stages\n- 启动 orchestrator 线程交互是怎么样的, 有几个线程\n- how to load model (TTS/Omni/Diffusion)\n    - how to build stage graph  \n- 多模态请求怎么构建\n- Streaming 流程\n\n# Architecture\n\n## Entrypoint\n\n> OpenAPI/CLI\n\nkey func\n- omni_run_server\n- build_async_omni_from_stage_config\n\nmodule\n\n- AsyncOmni (EngineClient, OmniBase)\n    - generate\n\n## Engine\n\n- AsyncOmniEngine\n    - init\n        - _resolve_stage_configs: 读取配置\n        - [new thread] _bootstrap_orchestrator: 启动orchestrator\n            - _initialize_stages: 初始化stage\n        - add_request_async\n\n- Orchestrator: \n    - init: at AsyncOmniEngine\n    - run: Main entry point for the Orchestrator event loop.\n        - _request_handler: handle message from AsyncOmniEngine\n        - _orchestration_output_handler: manage inter-stage outputs\n            - _orchestration_loop\n        - _watch_replica_list:\n    - _handle_add_request\n    - _route_output\n        - _forward_to_next_stage\n\n- StagePool\n    - submit_initial\n    - process_engine_inputs\n    - [stage - stage] process_engine_inputs\n\n\n## Stage Backend\n\n- OmniARScheduler\n- OmniGenerationScheduler\n- DiffusionEngine\n\n## Model Runner\n\n- GPUARModelRunner\n\n## Config\n\n- PipelineConfig\n- StagePipelineConfig\n"
   },
   {
     "slug": "sglang-basics",

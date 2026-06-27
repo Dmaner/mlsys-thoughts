@@ -3,11 +3,12 @@ Tags: #vLLM #vLLM-Omni
 Desc: Explore vllm-omni internals — how multimodal serving optimization works. 
 ```
 
-# [Processing] vLLM-Omni Overview 
+# vLLM-Omni Overview (🏗️ Processing...)
 
 
 # TODO
 
+- [Core Problem] How does to orchestrator to manage stages
 - 启动 orchestrator 线程交互是怎么样的, 有几个线程
 - how to load model (TTS/Omni/Diffusion)
     - how to build stage graph  

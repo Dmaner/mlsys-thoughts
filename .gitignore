@@ -102,3 +102,6 @@ ref/*
 
 # agents env
 .env.example
+
+# temp
+.temp/*
