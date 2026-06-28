@@ -8,14 +8,36 @@
 
   /* Renders the small inline Markdown subset used in cards, paragraphs, and tables. */
   function inlineMarkdown(value) {
-    return escapeHtml(value)
+    const htmlTokens = [];
+    const stashHtml = (html) => {
+      const token = `\uE000${htmlTokens.length}\uE000`;
+      htmlTokens.push(html);
+      return token;
+    };
+
+    const restoreHtml = (html) => html.replace(/\uE000(\d+)\uE000/g, (_, index) => htmlTokens[Number(index)] || "");
+
+    const html = escapeHtml(value)
       .replace(/!\[([^\]]*)\]\(([^)\s]+)(?:\s+&quot;([^&]*)&quot;)?\)/g, (_, alt, src, title = "") => {
         const titleAttribute = title ? ` title="${title}"` : "";
-        return `<img src="${src}" alt="${alt}" loading="lazy" decoding="async"${titleAttribute}>`;
+        return stashHtml(`<img src="${src}" alt="${alt}" loading="lazy" decoding="async"${titleAttribute}>`);
       })
-      .replace(/`([^`]+)`/g, "<code>$1</code>")
+      .replace(/`([^`]+)`/g, (_, code) => stashHtml(`<code>${code}</code>`))
       .replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>")
-      .replace(/(^|[^!])\[([^\]]+)\]\(([^)]+)\)/g, '$1<a href="$3">$2</a>');
+      .replace(/(^|[^!])\[([^\]]+)\]\(([^)]+)\)/g, (_, prefix, text, href) => {
+        return `${prefix}${stashHtml(`<a href="${href}">${text}</a>`)}`;
+      })
+      .replace(/(^|[\s(>])((?:https?:\/\/|mailto:)[^\s<]+)/g, (_, prefix, url) => {
+        let cleanUrl = url;
+        let trailing = "";
+        while (/[.,;:!?)]$/.test(cleanUrl)) {
+          trailing = `${cleanUrl.at(-1)}${trailing}`;
+          cleanUrl = cleanUrl.slice(0, -1);
+        }
+        return `${prefix}<a href="${cleanUrl}">${cleanUrl}</a>${trailing}`;
+      });
+
+    return restoreHtml(html);
   }
 
   /* Shell highlighting keeps common bash snippets readable without a dependency. */
