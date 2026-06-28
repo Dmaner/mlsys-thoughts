@@ -9,9 +9,13 @@
   /* Renders the small inline Markdown subset used in cards, paragraphs, and tables. */
   function inlineMarkdown(value) {
     return escapeHtml(value)
+      .replace(/!\[([^\]]*)\]\(([^)\s]+)(?:\s+&quot;([^&]*)&quot;)?\)/g, (_, alt, src, title = "") => {
+        const titleAttribute = title ? ` title="${title}"` : "";
+        return `<img src="${src}" alt="${alt}" loading="lazy" decoding="async"${titleAttribute}>`;
+      })
       .replace(/`([^`]+)`/g, "<code>$1</code>")
       .replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>")
-      .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>');
+      .replace(/(^|[^!])\[([^\]]+)\]\(([^)]+)\)/g, '$1<a href="$3">$2</a>');
   }
 
   /* Shell highlighting keeps common bash snippets readable without a dependency. */

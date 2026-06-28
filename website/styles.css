@@ -775,6 +775,16 @@ main {
   text-underline-offset: 3px;
 }
 
+.markdown-body img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 0.78em 0 1.1em;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--paper-2);
+}
+
 .markdown-body code {
   border-radius: 5px;
   background: var(--code-bg);
