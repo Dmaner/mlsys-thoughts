@@ -1,3 +1,8 @@
+```
+Tags: #CS336 #Multimodality #VisionLanguage
+Desc: Notes from CS336 Lecture 17 on multimodality, visual encoders, image-token injection, and omni model design.
+```
+
 # Lecture 17: Alignment - Multimodality
 
 > Lecture : https://www.youtube.com/watch?v=26FtD08ZpOU&list=PLoROMvodv4rMqXOcazWaTUHhq-yembLCV&index=17 \
