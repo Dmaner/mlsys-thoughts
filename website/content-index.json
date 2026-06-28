@@ -31,14 +31,15 @@
     "slug": "slime-overview",
     "title": "Slime Overview",
     "category": "Agent",
-    "description": "1. Official Doc: https://thudm.github.io/slime/",
+    "description": "Slime RL post-training framework notes, source references, and architecture reading TODOs.",
     "path": "../agent/rl/slime-overview.md",
     "createdAt": "2026-06-27T12:58:15.917Z",
     "tags": [
-      "RL"
+      "RL",
+      "Slime"
     ],
     "featured": false,
-    "markdown": "```\ntags: #RL\n```\n\n# Slime Overview\n\n## TODO\n\n- know the basic of post training infra\n\n## Ari\n\n## Reference\n\n1. Official Doc: https://thudm.github.io/slime/\n2. [深入浅出 slime RL 框架的优雅设计与源码](https://zhuanlan.zhihu.com/p/1946402397409740613) "
+    "markdown": "```\nTags: #RL #Slime\nDesc: Slime RL post-training framework notes, source references, and architecture reading TODOs.\n```\n\n# Slime Overview\n\n## TODO\n\n- know the basic of post training infra\n\n## Ari\n\n## Reference\n\n1. Official Doc: https://thudm.github.io/slime/\n2. [深入浅出 slime RL 框架的优雅设计与源码](https://zhuanlan.zhihu.com/p/1946402397409740613) \n"
   },
   {
     "slug": "sglang-omni-overview",

@@ -738,13 +738,15 @@ main {
 
 .markdown-body p,
 .markdown-body ul,
+.markdown-body ol,
 .markdown-body blockquote,
 .markdown-body pre,
 .markdown-table-wrap {
   margin: 0.58em 0;
 }
 
-.markdown-body ul {
+.markdown-body ul,
+.markdown-body ol {
   padding-left: 1.35em;
 }
 
@@ -752,7 +754,8 @@ main {
   margin: 0.28em 0;
 }
 
-.markdown-body li > ul {
+.markdown-body li > ul,
+.markdown-body li > ol {
   margin: 0.22em 0 0.22em 0.1em;
 }
 

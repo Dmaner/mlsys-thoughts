@@ -1,5 +1,6 @@
 ```
-tags: #RL
+Tags: #RL #Slime
+Desc: Slime RL post-training framework notes, source references, and architecture reading TODOs.
 ```
 
 # Slime Overview

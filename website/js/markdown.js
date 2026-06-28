@@ -181,22 +181,38 @@
     return match ? match[0].length : 0;
   }
 
-  /* Builds nested lists from Markdown indentation instead of flattening bullets. */
+  /* Builds nested ordered and unordered lists from Markdown indentation. */
   function renderNestedList(items) {
     const root = { children: [] };
     const stack = [{ indent: -1, node: root }];
 
     items.forEach((item) => {
       while (stack.length > 1 && item.indent <= stack[stack.length - 1].indent) stack.pop();
-      const node = { text: item.text, children: [] };
+      const node = { text: item.text, ordered: item.ordered, number: item.number, children: [] };
       stack[stack.length - 1].node.children.push(node);
       stack.push({ indent: item.indent, node });
     });
 
     function renderNodes(nodes) {
-      return `<ul>${nodes
-        .map((node) => `<li>${inlineMarkdown(node.text)}${node.children.length ? renderNodes(node.children) : ""}</li>`)
-        .join("")}</ul>`;
+      let html = "";
+      let index = 0;
+
+      while (index < nodes.length) {
+        const ordered = nodes[index].ordered;
+        const group = [];
+        while (index < nodes.length && nodes[index].ordered === ordered) {
+          group.push(nodes[index]);
+          index += 1;
+        }
+
+        const tagName = ordered ? "ol" : "ul";
+        const startAttribute = ordered && group[0].number > 1 ? ` start="${group[0].number}"` : "";
+        html += `<${tagName}${startAttribute}>${group
+          .map((node) => `<li>${inlineMarkdown(node.text)}${node.children.length ? renderNodes(node.children) : ""}</li>`)
+          .join("")}</${tagName}>`;
+      }
+
+      return html;
     }
 
     return renderNodes(root.children);
@@ -312,7 +328,14 @@
       const item = line.match(/^(\s*)[-*]\s+(.+)$/);
       if (item) {
         flushParagraph();
-        list.push({ indent: leadingIndent(item[1]), text: item[2] });
+        list.push({ indent: leadingIndent(item[1]), ordered: false, number: 0, text: item[2] });
+        continue;
+      }
+
+      const orderedItem = line.match(/^(\s*)(\d+)[.)]\s+(.+)$/);
+      if (orderedItem) {
+        flushParagraph();
+        list.push({ indent: leadingIndent(orderedItem[1]), ordered: true, number: Number(orderedItem[2]), text: orderedItem[3] });
         continue;
       }
 
